@@ -1,2 +1,1 @@
-# daito-yolo
-yolo集合,扩展,应用
+daito-yolo系列--yolo系列的学习,应用,部署,扩展
