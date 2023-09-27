@@ -11,3 +11,20 @@
 建议: ①先看看论文，对yolo有个大致的了解
      ②结合论文看代码中yolo网络模型的构成，LOSS损失函数 
      ③进行训练看最后的结果
+
+代码目录树结构如下:
+     --yolov1(根目录)
+          --data(数据集目录)
+               --combine_doc
+                    --images(数据集可自行制作)
+                    --labels
+                    ...
+               --example
+               --log.txt
+          --model(模型定义目录)
+          --result(测试结果目录)
+          --run(训练,测试等运行目录)
+          --weights(保存权重目录)
+          --dataset.py(定义数据集)
+          --train.py(训练脚本)
+          ...(论文和readme)
