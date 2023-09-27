@@ -1,7 +1,7 @@
 '''
 @FileName   :visualize.py
-@Description:
-@Date       :2020/09/27 10:12:48
+@Description:可视化--visdom
+@Date       :2022/09/27 10:12:48
 @Author     :daito
 @Website    :Https://github.com/zhd5120153951
 @Copyright  :daito

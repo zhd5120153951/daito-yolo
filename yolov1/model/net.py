@@ -1,7 +1,7 @@
 '''
 @FileName   :net.py
-@Description:
-@Date       :2020/09/26 16:38:39
+@Description:网络模型构建部分
+@Date       :2022/09/26 16:38:39
 @Author     :daito
 @Website    :Https://github.com/zhd5120153951
 @Copyright  :daito

@@ -1,7 +1,7 @@
 '''
 @FileName   :resnet_yolo.py
-@Description:
-@Date       :2020/09/27 10:12:35
+@Description:网络模型构建部分
+@Date       :2022/09/27 10:12:35
 @Author     :daito
 @Website    :Https://github.com/zhd5120153951
 @Copyright  :daito

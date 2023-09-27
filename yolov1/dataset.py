@@ -1,7 +1,7 @@
 '''
 @FileName   :dataset.py
-@Description:
-@Date       :2020/09/27 10:19:26
+@Description:数据读取
+@Date       :2022/09/27 10:19:26
 @Author     :daito
 @Website    :Https://github.com/zhd5120153951
 @Copyright  :daito
@@ -59,10 +59,8 @@ class yoloDataset(data.Dataset):
         self.BGR2RGB = BGR2RGB
         self.subMean = subMean
 
-        # --------------------------------------------------------------------------------------------------------------
         # 用指令合并数据集，报错就给注释了
-        # --------------------------------------------------------------------------------------------------------------
-        # if isinstance(list_file, list):                                         # 判断list_file是一个list还是其他类型，如果是list就合并
+        # if isinstance(list_file, list):                  # 判断list_file是一个list还是其他类型，如果是list就合并
         #     # Cat multiple list files together.
         #     # This is especially useful for voc07/voc12 combination.
         #
@@ -80,7 +78,6 @@ class yoloDataset(data.Dataset):
         #     # os.system('cat %s > %s' % (' '.join(list_file), tmp_file))
         #     os.system('type %s > %s' % (' '.join(list_file), tmp_file))         # 把voc2012和voc2007合并到listfile.txt
         #     list_file = tmp_file
-        # --------------------------------------------------------------------------------------------------------------
 
         with open(list_file) as f:
             lines = f.readlines()
@@ -128,9 +125,9 @@ class yoloDataset(data.Dataset):
             img = self.RandomSaturation(img)
             img, boxes, labels = self.randomShift(img, boxes, labels)
             img, boxes, labels = self.randomCrop(img, boxes, labels)
-        # --------------------------------------------------------------------------------------------------------------
+
         # debug-删
-        # --------------------------------------------------------------------------------------------------------------
+
         # box_show = boxes.numpy().reshape(-1)
         # print(box_show)
         # img_show = self.BGR2RGB(img)
@@ -141,7 +138,6 @@ class yoloDataset(data.Dataset):
         # # cv2.rectangle(img,pt1=(10,10),pt2=(100,100),color=(0,255,0),thickness=1)
         # plt.imshow(img_show)
         # plt.show()
-        # --------------------------------------------------------------------------------------------------------------
 
         h, w, _ = img.shape
         boxes /= torch.Tensor([w, h, w, h]).expand_as(boxes)
@@ -188,23 +184,20 @@ def main():
     from torch.utils.data import DataLoader
     import torchvision.transforms as transforms
 
-    # ------------------------------------------------------------------------------------------------------------------
     # 源路径
     # file_root = '../data_dir/VOC0712/VOC2007/JPEGImages/'
-    # ------------------------------------------------------------------------------------------------------------------
-    file_root = r'../data_dir/combine_doc/images/'
 
-    # ------------------------------------------------------------------------------------------------------------------
+    file_root = './data/combine_doc/images/'
+
     # 源路径
     # train_dataset = yoloDataset(root=file_root, list_file='voc12_trainval.txt',
     #                             train=True, transform = [transforms.ToTensor()] )
-    # ------------------------------------------------------------------------------------------------------------------
 
     # img = cv2.imread(os.path.join(self.root+fname))
     # list_file=[r'../data_dir/VOC0712/voc2012.txt', r'../data_dir/VOC0712/voc2007.txt']
 
     train_dataset = yoloDataset(root=file_root,
-                                list_file=r'../data_dir/VOC0712/voc2012.txt',
+                                list_file='./data/combine_doc/voc2012.txt',
                                 train=True,
                                 transform=[transforms.ToTensor()])
 

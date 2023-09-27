@@ -1,7 +1,7 @@
 '''
 @FileName   :eval_voc.py
-@Description:
-@Date       :2020/09/27 10:16:40
+@Description:评估整体数据
+@Date       :2022/09/27 10:16:40
 @Author     :daito
 @Website    :Https://github.com/zhd5120153951
 @Copyright  :daito
@@ -11,6 +11,7 @@
 '''
 import os
 import torch
+import numpy as np
 from predict import predict_gpu
 
 # 修改前：
@@ -148,7 +149,7 @@ def test_eval():
 
 if __name__ == '__main__':
     #test_eval()
-    from code_dir.run_code.predict import *
+    from run.predict import *
     from collections import defaultdict
     from tqdm import tqdm
 
@@ -156,7 +157,7 @@ if __name__ == '__main__':
     preds = defaultdict(list)
     image_list = []  # image path list
 
-    f = open('../../data_dir/combine_doc/voc2007test.txt')
+    f = open('./data/combine_doc/voc2007test.txt')
     lines = f.readlines()
 
     file_list = []
@@ -204,20 +205,19 @@ if __name__ == '__main__':
     count = 0
     for image_path in tqdm(image_list):
         print(image_path)
-        # --------------------------------------------------------------------------------------------------------------
+
         # result[[left_up,right_bottom,class_name,image_path],]
-        # --------------------------------------------------------------------------------------------------------------
+
         result = predict_gpu(model, image_path, root_path=r'..\..\data_dir\combine_doc\images/')
-        # --------------------------------------------------------------------------------------------------------------
+
         # image_id is actually image_path
-        # --------------------------------------------------------------------------------------------------------------
+
         for (x1, y1), (x2, y2), class_name, image_id, prob in result:
             preds[class_name].append([image_id, prob, x1, y1, x2, y2])
         # print(image_path)
 
-        # --------------------------------------------------------------------------------------------------------------
         # 写入预测结果---需要用到时候解除注释
-        # --------------------------------------------------------------------------------------------------------------
+
         # # 写入的路径信息
         # image = cv2.imread(r'A:\Learning_doc\detection_learning\yolov1\data_dir\combine_doc\images/'+image_path)
         # for left_up, right_bottom,class_name,_,prob in result:
@@ -235,7 +235,6 @@ if __name__ == '__main__':
         # # 只输出count张图像
         # if count == 200:
         #     break
-        # --------------------------------------------------------------------------------------------------------------
 
     print('---start evaluate---')
     voc_eval(preds, target, VOC_CLASSES=VOC_CLASSES)

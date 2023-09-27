@@ -1,7 +1,7 @@
 '''
 @FileName   :train.py
-@Description:
-@Date       :2020/09/26 15:44:35
+@Description:训练模型
+@Date       :2022/09/26 15:44:35
 @Author     :daito
 @Website    :Https://github.com/zhd5120153951
 @Copyright  :daito
@@ -34,7 +34,7 @@ use_gpu = torch.cuda.is_available()
 # 参数的管理
 # 参数含义 (S,B,l_coord,l_noobj):
 learning_rate = 0.001  #学习率
-num_epochs = 10  #训练轮数
+num_epochs = 50  #训练轮数
 batch_size = 8  #批大小
 num_workers = 4  #线程数
 default_backbone = True  #默认backbone
@@ -144,14 +144,13 @@ test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num
 
 # 查看数据集中的图片数量
 
-# print('the dataset has %d images' % (len(train_dataset)))
-# print('the batch_size is %d' % (batch_size))
+print('the dataset has %d images' % (len(train_dataset)))
+print('the batch_size is %d' % (batch_size))
 
 logfile = open('./data/log.txt', 'w')
 
 # 使用时修改为自己的环境名： env='XXX'
-
-vis = Visualizer(env='pytorchgpu')
+# vis = Visualizer(env='py38_torch_gpu')
 best_test_loss = np.inf
 
 
@@ -209,7 +208,8 @@ if __name__ == '__main__':
                 print('Epoch [%d/%d], Iter [%d/%d] Loss: %.4f, average_loss: %.4f' %
                       (epoch + 1, num_epochs, i + 1, len(train_loader), loss.data.item(), total_loss / (i + 1)))
                 num_iter += 1
-                vis.plot_train_val(loss_train=total_loss / (i + 1))
+                # 暂时屏蔽训练可视化损失曲线
+                # vis.plot_train_val(loss_train=total_loss / (i + 1))
 
         # validation
         validation_loss = 0.0
@@ -224,7 +224,8 @@ if __name__ == '__main__':
             loss = criterion(pred, target)
             validation_loss += loss.data.item()
         validation_loss /= len(test_loader)
-        vis.plot_train_val(loss_val=validation_loss)
+        #屏蔽验证时的损失曲线
+        # vis.plot_train_val(loss_val=validation_loss)
 
         if best_test_loss > validation_loss:
             best_test_loss = validation_loss

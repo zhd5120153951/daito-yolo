@@ -1,7 +1,7 @@
 '''
 @FileName   :xml_2_txt.py
-@Description:
-@Date       :2020/09/27 10:18:25
+@Description:xml格式标签转换为txt格式
+@Date       :2022/09/27 10:18:25
 @Author     :daito
 @Website    :Https://github.com/zhd5120153951
 @Copyright  :daito
@@ -43,12 +43,13 @@ def parse_rec(filename):
     return objects
 
 
-txt_file = open('../../data_dir/voc2007test.txt', 'w')
+txt_file = open('./data/voc2007test.txt', 'w')
 test_file = open('voc07testimg.txt', 'r')
 lines = test_file.readlines()
 lines = [x[:-1] for x in lines]
 print(lines)
 
+#ubuntu下的原始xml格式文件
 Annotations = '/home/xzh/data/VOCdevkit/VOC2007/Annotations/'
 xml_files = os.listdir(Annotations)
 
