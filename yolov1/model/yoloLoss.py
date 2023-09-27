@@ -50,9 +50,9 @@ class yoloLoss(nn.Module):
         noo_target = target_tensor[noo_mask].view(-1, 30)
         noo_pred_mask = torch.cuda.ByteTensor(noo_pred.size())
         noo_pred_mask.zero_()
-        # --------------------------------------------------------------------------------------------------------------
+
         # 转化为bool类型成功消除：   样例->a = a.bool()
-        # --------------------------------------------------------------------------------------------------------------
+
         noo_pred_mask = noo_pred_mask.bool()
 
         noo_pred_mask[:, 4] = 1
@@ -70,11 +70,11 @@ class yoloLoss(nn.Module):
         coo_not_response_mask = torch.cuda.ByteTensor(box_target.size())
         coo_not_response_mask.zero_()
         box_target_iou = torch.zeros(box_target.size()).cuda()
-        # --------------------------------------------------------------------------------------------------------------
+
         # 转化为bool类型成功消除：   样例->a = a.bool()
         # Warning: indexing with dtype torch.uint8 is now deprecated,
         # please use a dtype torch.bool instead. (function expandTensors)
-        # --------------------------------------------------------------------------------------------------------------
+
         coo_response_mask = coo_response_mask.bool()
         coo_not_response_mask = coo_not_response_mask.bool()
 

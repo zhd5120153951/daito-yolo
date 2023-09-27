@@ -28,35 +28,28 @@ import matplotlib.pyplot as plt
 
 dtype = torch.bool
 
-# ----------------------------------------------------------------------------------------------------------------------
 # 判定是否使用cuda
-# ----------------------------------------------------------------------------------------------------------------------
 use_gpu = torch.cuda.is_available()
 
-# ----------------------------------------------------------------------------------------------------------------------
 # 参数的管理
 # 参数含义 (S,B,l_coord,l_noobj):
-# ----------------------------------------------------------------------------------------------------------------------
-learning_rate = 0.001
-num_epochs = 50
-batch_size = 10
-num_workers = 0
-use_resnet = True
+learning_rate = 0.001  #学习率
+num_epochs = 10  #训练轮数
+batch_size = 8  #批大小
+num_workers = 4  #线程数
+default_backbone = True  #默认backbone
 criterion = yoloLoss(7, 2, 5, 0.5)
 file_root = './data/combine_doc/images/'
 
-# ----------------------------------------------------------------------------------------------------------------------
-# backbone使用resnet还是默认使用VGG16
-# ----------------------------------------------------------------------------------------------------------------------
+# backbone使用resnet还是使用VGG16--默认resnet
 
-if use_resnet:
+if default_backbone:
     net = resnet50()
 else:
     net = vgg16_bn()
 
-# ----------------------------------------------------------------------------------------------------------------------
 # resnet的分类器的结构组成
-# ----------------------------------------------------------------------------------------------------------------------
+
 # net.classifier = nn.Sequential(
 #                  nn.Linear(512 * 7 * 7, 4096),
 #                  nn.ReLU(True),
@@ -69,26 +62,22 @@ else:
 # net = resnet18(pretrained=True)
 # net.fc = nn.Linear(512,1470)
 
-# ----------------------------------------------------------------------------------------------------------------------
 # initial Linear
-# ----------------------------------------------------------------------------------------------------------------------
+
 # for m in net.modules():
 #     if isinstance(m, nn.Linear):
 #         m.weight.data.normal_(0, 0.01)
 #         m.bias.data.zero_()
 # net.load_state_dict(torch.load('yolo.pth'))
 
-# ----------------------------------------------------------------------------------------------------------------------
 # 查看网络结构和加载的参数
 # print(net)
 # print('load pre-trined model')
-# ----------------------------------------------------------------------------------------------------------------------
 
-# ----------------------------------------------------------------------------------------------------------------------
 # 判定使用的网络结构
 # 加载对应的模型参数
-# ----------------------------------------------------------------------------------------------------------------------
-if use_resnet:  # resnet
+
+if default_backbone:  # resnet
     resnet = models.resnet50(pretrained=True)
     new_state_dict = resnet.state_dict()
     dd = net.state_dict()
@@ -110,20 +99,19 @@ else:  # vgg
             dd[k] = new_state_dict[k]
     net.load_state_dict(dd)
 
-if False:
-    net.load_state_dict(torch.load('best.pth'))
+# if False:
+# net.load_state_dict(torch.load('best.pth'))
 
-# print('cuda', torch.cuda.current_device(), torch.cuda.device_count())
+print('cuda', torch.cuda.current_device(), torch.cuda.device_count())
 
 if use_gpu:
     net.cuda()
 
 net.train()
 
-# ----------------------------------------------------------------------------------------------------------------------
 # 原优化器参数--Lr的差异性
 # optimizer = torch.optim.Adam(net.parameters(),lr=learning_rate,weight_decay=1e-4)
-# ----------------------------------------------------------------------------------------------------------------------
+
 params = []
 params_dict = dict(net.named_parameters())
 for key, value in params_dict.items():
@@ -134,46 +122,40 @@ for key, value in params_dict.items():
 
 optimizer = torch.optim.SGD(params, lr=learning_rate, momentum=0.9, weight_decay=5e-4)
 
-# ----------------------------------------------------------------------------------------------------------------------
 # 源路径
 # train_dataset = yoloDataset(root=file_root, list_file=['voc2012.txt', 'voc2007.txt'],
 #                             train=True, transform = [transforms.ToTensor()] )
 # test_dataset = yoloDataset(root=file_root,list_file='voc07_test.txt',
 #                            train=False,transform = [transforms.ToTensor()] )
-# ----------------------------------------------------------------------------------------------------------------------
-# 训练
 
+# 训练数据
 train_dataset = yoloDataset(root=file_root,
-                            list_file=r'./data/combine_doc/voc2012.txt',
+                            list_file='./data/combine_doc/voc2012.txt',
                             train=True,
                             transform=[transforms.ToTensor()])
 train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
 
-# 测试
+# 测试数据
 test_dataset = yoloDataset(root=file_root,
-                           list_file=r'./data/combine_doc/voc2007test.txt',
+                           list_file='./data/combine_doc/voc2007test.txt',
                            train=False,
                            transform=[transforms.ToTensor()])
 test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
 
-# ----------------------------------------------------------------------------------------------------------------------
 # 查看数据集中的图片数量
-# ----------------------------------------------------------------------------------------------------------------------
+
 # print('the dataset has %d images' % (len(train_dataset)))
 # print('the batch_size is %d' % (batch_size))
 
 logfile = open('./data/log.txt', 'w')
 
-# ----------------------------------------------------------------------------------------------------------------------
 # 使用时修改为自己的环境名： env='XXX'
-# ----------------------------------------------------------------------------------------------------------------------
+
 vis = Visualizer(env='pytorchgpu')
 best_test_loss = np.inf
 
 
-# ----------------------------------------------------------------------------------------------------------------------
 # 显示图片
-# ----------------------------------------------------------------------------------------------------------------------
 def imgshow(img):
     img = img / 2 + 0.5
     npimg = img.numpy()
@@ -186,9 +168,7 @@ if __name__ == '__main__':
     for epoch in range(num_epochs):
         net.train()
 
-        # --------------------------------------------------------------------------------------------------------------
         # 让学习率变化起来，使其更新到优化器中，使用时可解除注释
-        # --------------------------------------------------------------------------------------------------------------
         # if epoch == 1:
         #     learning_rate = 0.0005
         # if epoch == 2:
@@ -196,7 +176,6 @@ if __name__ == '__main__':
         # if epoch == 3:
         #     learning_rate = 0.001
 
-        # --------------------------------------------------------------------------------------------------------------
         if epoch == 30:
             learning_rate = 0.0001
         if epoch == 40:
@@ -255,8 +234,5 @@ if __name__ == '__main__':
         logfile.flush()
         torch.save(net.state_dict(), './weights/yolo.pth')
 
-# ----------------------------------------------------------------------------------------------------------------------
 # 在运行之前先打开terminal终端，输入以下命令，查看训练损失曲线。
-# ----------------------------------------------------------------------------------------------------------------------
 # python -m visdom.server
-# ----------------------------------------------------------------------------------------------------------------------
