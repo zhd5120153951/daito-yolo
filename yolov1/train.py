@@ -22,7 +22,7 @@ from model.model_utils import vgg16_bn
 from model.model_utils import resnet50
 from model.yoloLoss import yoloLoss
 from dataset import yoloDataset
-from model.visualize import Visualizer
+from model.visualize import Visualizer  # 暂时屏蔽
 import numpy as np
 import matplotlib.pyplot as plt
 

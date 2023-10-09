@@ -10,7 +10,7 @@
 @Email      :2462491568@qq.com
 '''
 '''
-txt描述文件 image_name.jpg x y w h c x y w h c 这样就是说一张图片中有两个目标
+txt描述文件 image_name.jpg x y w h c x y w h c 这样就是说一张图片中有两个目标(横向和纵向)
 '''
 import os
 import sys
@@ -60,15 +60,15 @@ class yoloDataset(data.Dataset):
         self.subMean = subMean
 
         # 用指令合并数据集，报错就给注释了
-        # if isinstance(list_file, list):                  # 判断list_file是一个list还是其他类型，如果是list就合并
+        # if isinstance(list_file, list): # 判断list_file是一个list还是其他类型，如果是list就合并
         #     # Cat multiple list files together.
         #     # This is especially useful for voc07/voc12 combination.
         #
-        #     # tmp_file = '/tmp/listfile.txt'                                    # 这里的listfile是传入的文件名，和root是相对路关系
+        #     # tmp_file = '/tmp/listfile.txt' # 这里的listfile是传入的文件名，和root是相对路关系
         #     # 用tmp_file进行读取一方修改到原始的文件
-        #     #  file_root = '../data_dir/VOC0712/VOC2007/JPEGImages'             # 方便查看
+        #     #  file_root = './data/VOC0712/VOC2007/JPEGImages'  # 方便查看
         #
-        #     tmp_file = '../data_dir/VOC0712/listfile.txt'
+        #     tmp_file = './data/VOC0712/listfile.txt'
         #
         #     if not os.path.exists(tmp_file):
         #         os.mkdir(tmp_file)
@@ -76,7 +76,7 @@ class yoloDataset(data.Dataset):
         #     # print('cat %s > %s' % (' '.join(list_file), tmp_file))
         #
         #     # os.system('cat %s > %s' % (' '.join(list_file), tmp_file))
-        #     os.system('type %s > %s' % (' '.join(list_file), tmp_file))         # 把voc2012和voc2007合并到listfile.txt
+        #     os.system('type %s > %s' % (' '.join(list_file), tmp_file)) # 把voc2012和voc2007合并到listfile.txt
         #     list_file = tmp_file
 
         with open(list_file) as f:
@@ -90,33 +90,33 @@ class yoloDataset(data.Dataset):
             box = []
             label = []
             for i in range(num_boxes):
-                x = float(splited[1 + 5 * i])  # split[0]是图片名，后面才是坐标（左上，右下）
+                x = float(splited[1 + 5 * i])  # split[0]是图片名，后面才是坐标（x,y,w,h）
                 y = float(splited[2 + 5 * i])
                 x2 = float(splited[3 + 5 * i])
                 y2 = float(splited[4 + 5 * i])
                 c = splited[5 + 5 * i]  # 类别——class
                 box.append([x, y, x2, y2])
-                label.append(int(c) + 1)  # 类别角标从0开始的，所以要加1
+                label.append(int(c) + 1)  # 类0开是背景，所以要加1
             self.boxes.append(torch.Tensor(box))
             self.labels.append(torch.LongTensor(label))
         self.num_samples = len(self.boxes)  # 样本数等于框数
 
     def __getitem__(self, idx):
         fname = self.fnames[idx]
-        # print(self.root+fname)
+        # print(self.root + fname)
 
         img = cv2.imread(os.path.join(self.root + fname))
         # print(os.path.join(self.root + fname))
         # print("图像：", img)
 
-        # cv2.imshow(img)
+        # cv2.imshow("img", img)
         # cv2.waitKey()
 
         boxes = self.boxes[idx].clone()
         labels = self.labels[idx].clone()
 
         if self.train:
-            #img = self.random_bright(img)
+            # img = self.random_bright(img)
             img, boxes = self.random_flip(img, boxes)
             img, boxes = self.randomScale(img, boxes)
             img = self.randomBlur(img)
@@ -212,5 +212,5 @@ def main():
 
 
 if __name__ == '__main__':
-    # main()
-    pass
+    main()
+    print("验证结束...")
