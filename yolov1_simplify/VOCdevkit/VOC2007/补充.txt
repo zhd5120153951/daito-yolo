@@ -1,0 +1,3 @@
+1.此目录下创建Annotations文件夹并放入xml文件以及JPEGImages文件夹并放入jpg文件
+2.先执行write_txt.py生成txt,在train
+3.Annotations和JPEGImages在绝对路径下(相对路径也可以)
