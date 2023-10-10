@@ -187,7 +187,7 @@ def main():
     # 源路径
     # file_root = '../data_dir/VOC0712/VOC2007/JPEGImages/'
 
-    file_root = './data/combine_doc/images/'
+    file_root = 'E:\\Source\\Github\\datasets\\yolov1\\combine_doc\\images\\'
 
     # 源路径
     # train_dataset = yoloDataset(root=file_root, list_file='voc12_trainval.txt',
@@ -197,7 +197,7 @@ def main():
     # list_file=[r'../data_dir/VOC0712/voc2012.txt', r'../data_dir/VOC0712/voc2007.txt']
 
     train_dataset = yoloDataset(root=file_root,
-                                list_file='./data/combine_doc/voc2012.txt',
+                                list_file='E:\\Source\\Github\\datasets\\yolov1\\combine_doc\\voc2012.txt',
                                 train=True,
                                 transform=[transforms.ToTensor()])
 
