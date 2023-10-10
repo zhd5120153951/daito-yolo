@@ -34,12 +34,13 @@ use_gpu = torch.cuda.is_available()
 # 参数的管理
 # 参数含义 (S,B,l_coord,l_noobj):
 learning_rate = 0.001  #学习率
-num_epochs = 50  #训练轮数
-batch_size = 8  #批大小
+num_epochs = 30  #训练轮数
+batch_size = 4  #批大小
 num_workers = 4  #线程数
 default_backbone = True  #默认backbone
 criterion = yoloLoss(7, 2, 5, 0.5)
-file_root = './data/combine_doc/images/'
+# file_root = './data/combine_doc/images/'相对路径
+file_root = 'E:\\Source\\Github\\datasets\\yolov1\\combine_doc\\images\\'  #绝对路径
 
 # backbone使用resnet还是使用VGG16--默认resnet
 
@@ -130,14 +131,14 @@ optimizer = torch.optim.SGD(params, lr=learning_rate, momentum=0.9, weight_decay
 
 # 训练数据
 train_dataset = yoloDataset(root=file_root,
-                            list_file='./data/combine_doc/voc2012.txt',
+                            list_file='E:\\Source\\Github\\datasets\\yolov1\\combine_doc\\voc2012.txt',
                             train=True,
                             transform=[transforms.ToTensor()])
 train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
 
 # 测试数据
 test_dataset = yoloDataset(root=file_root,
-                           list_file='./data/combine_doc/voc2007test.txt',
+                           list_file='E:\\Source\\Github\\datasets\\yolov1\\combine_doc\\voc2007test.txt',
                            train=False,
                            transform=[transforms.ToTensor()])
 test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
@@ -204,7 +205,7 @@ if __name__ == '__main__':
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
-            if (i + 1) % 5 == 0:
+            if (i + 1) % 10 == 0:
                 print('Epoch [%d/%d], Iter [%d/%d] Loss: %.4f, average_loss: %.4f' %
                       (epoch + 1, num_epochs, i + 1, len(train_loader), loss.data.item(), total_loss / (i + 1)))
                 num_iter += 1
