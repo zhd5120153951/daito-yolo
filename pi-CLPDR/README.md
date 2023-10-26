@@ -1,5 +1,7 @@
 ## What's New
 
+**2023.10.26 在PC端调通车牌检测和识别**
+
 **2022.12.04 车辆和车牌一起检测看这里[车辆系统](https://github.com/we0091234/Car_recognition)**
 
 [yolov7 车牌检测+识别](https://github.com/we0091234/yolov7_plate)
