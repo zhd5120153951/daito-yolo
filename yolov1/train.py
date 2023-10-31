@@ -25,6 +25,18 @@ from dataset import yoloDataset
 from model.visualize import Visualizer  # 暂时屏蔽
 import numpy as np
 import matplotlib.pyplot as plt
+import logging
+
+#配置基本日志设置
+logging.basicConfig(
+    level=logging.DEBUG,  # 设置日志级别，可以选择DEBUG, INFO, WARNING, ERROR, CRITICAL
+    datefmt='%Y-%m-%d %H:%M:%S',  #设置日期时间格式
+    filename='yolov1.log',  #日志输出路径
+    filemode='w'  #指定日志文件的模式(a是追加,w是覆盖)
+)
+
+# 创建一个日志记录器
+logger = logging.getLogger('my_logger')
 
 dtype = torch.bool
 
@@ -34,9 +46,9 @@ use_gpu = torch.cuda.is_available()
 # 参数的管理
 # 参数含义 (S,B,l_coord,l_noobj):
 learning_rate = 0.001  #学习率
-num_epochs = 30  #训练轮数
+num_epochs = 100  #训练轮数
 batch_size = 4  #批大小
-num_workers = 4  #线程数
+num_workers = 2  #线程数
 default_backbone = True  #默认backbone
 criterion = yoloLoss(7, 2, 5, 0.5)
 # file_root = './data/combine_doc/images/'相对路径
@@ -131,14 +143,14 @@ optimizer = torch.optim.SGD(params, lr=learning_rate, momentum=0.9, weight_decay
 
 # 训练数据
 train_dataset = yoloDataset(root=file_root,
-                            list_file='E:\\Source\\Github\\datasets\\yolov1\\combine_doc\\voc2012.txt',
+                            list_file='E:\\Source\\Github\\datasets\\yolov1\\combine_doc\\voc_ours_train.txt',
                             train=True,
                             transform=[transforms.ToTensor()])
 train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
 
 # 测试数据
 test_dataset = yoloDataset(root=file_root,
-                           list_file='E:\\Source\\Github\\datasets\\yolov1\\combine_doc\\voc2007test.txt',
+                           list_file='E:\\Source\\Github\\datasets\\yolov1\\combine_doc\\voc_ours_test.txt',
                            train=False,
                            transform=[transforms.ToTensor()])
 test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers)

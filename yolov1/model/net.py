@@ -41,7 +41,7 @@ cfg = {
 }
 
 
-# 定于使用的VGG网络
+# 定义使用的VGG网络
 class VGG(nn.Module):
     def __init__(self, features, num_classes=1000, image_size=448):
         super(VGG, self).__init__()
@@ -162,5 +162,5 @@ def test():
 
 # 测试网络是否能跑通
 if __name__ == '__main__':
-
+    print("start test vgg16")
     test()

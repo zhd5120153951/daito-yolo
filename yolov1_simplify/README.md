@@ -4,10 +4,11 @@
 主干网络替换为了改进的ResNet50，对应博客地址https://blog.csdn.net/ing100/article/details/125155065
 
 ------------------------------------
+# what is new
 
-更新：
 
-2022.8.9 ---- predict.py  部分bug修复
+**2023.10.31** ---- 改进特征提取模块resnet,对比vgg,resnet18等backbone
+**2022.8.9** ---- predict.py  部分bug修复
 
 
 ------------------------------------
